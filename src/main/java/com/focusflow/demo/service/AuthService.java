@@ -44,7 +44,7 @@ public class AuthService {
     public AuthResponseDTO login(LoginDTO loginDto) {
         User user = userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
-        
+
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash())) {
             throw new ResourceNotFoundException("Invalid credentials");
         }
