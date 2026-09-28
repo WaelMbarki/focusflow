@@ -1,0 +1,12 @@
+spring.application.name=demo
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/focusflow
+spring.datasource.username=postgres
+spring.datasource.password=tttt
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=true
+spring.flyway.enabled=true
+
+app.jwt.secret=deEwdMexocHoUiFndxOUqVmmVww==
+app.jwt.access-token-expiration-ms=86400000
+.gitignore
