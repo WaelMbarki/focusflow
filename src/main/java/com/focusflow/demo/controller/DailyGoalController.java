@@ -35,4 +35,8 @@ public class DailyGoalController {
     public ResponseEntity<GoalResponseDTO> getGoal(@RequestParam String id) {
         return ResponseEntity.ok(dailyGoalService.getGoal(id));
     }
+    @PutMapping("/update")
+    public ResponseEntity<GoalResponseDTO> update(@RequestParam String id, @RequestBody GoalsInputDTO goal) {
+        return ResponseEntity.ok(dailyGoalService.update(id, goal));
+    }
 }

@@ -6,6 +6,7 @@ import com.focusflow.demo.dto.TaskResponseDTO;
 import com.focusflow.demo.exception.ResourceNotFoundException;
 import com.focusflow.demo.model.Project;
 import com.focusflow.demo.model.Task;
+import com.focusflow.demo.model.TaskStatus;
 import com.focusflow.demo.model.User;
 import com.focusflow.demo.repository.ProjectRepository;
 import com.focusflow.demo.repository.TaskRepository;
@@ -86,6 +87,43 @@ public class TaskService
     }
     return toDTO(task);
 }
+    public TaskResponseDTO update(String id, TaskInputDTO taskInput) {
+        Task task = findOwnedTask(id);
+
+        if (taskInput.getTitle() != null) {
+            task.setTitle(taskInput.getTitle());
+        }
+        if (taskInput.getDescription() != null) {
+            task.setDescription(taskInput.getDescription());
+        }
+        if (taskInput.getPriority() != null) {
+            task.setPriority(taskInput.getPriority());
+        }
+        if (taskInput.getStatus() != null) {
+            if (taskInput.getStatus() == TaskStatus.COMPLETED && task.getStatus() != TaskStatus.COMPLETED) {
+                task.setCompletedAt(LocalDateTime.now());
+            } else if (taskInput.getStatus() != TaskStatus.COMPLETED && task.getStatus() == TaskStatus.COMPLETED) {
+                task.setCompletedAt(null);
+            }
+            task.setStatus(taskInput.getStatus());
+        }        if (taskInput.getDueDate() != null) {
+            task.setDueDate(taskInput.getDueDate());
+        }
+        if (taskInput.getEstimatedDurationMinutes() != null) {
+            task.setEstimatedDurationMinutes(taskInput.getEstimatedDurationMinutes());
+        }
+
+        return toDTO(taskRepository.save(task));
+    }
+    private Task findOwnedTask(String id) {
+        String currentUserId = SecurityUtils.getCurrentUserId();
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+        if (!task.getUser().getId().equals(currentUserId)) {
+            throw new ResourceNotFoundException("Task not found");
+        }
+        return task;
+    }
     public TaskResponseDTO toDTO(Task task) {
         Project project = task.getProject();
         String projectId = project != null ? project.getId() : null;

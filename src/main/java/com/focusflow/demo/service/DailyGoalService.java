@@ -65,7 +65,34 @@ public class DailyGoalService {
         }
         return toDTO(goal);
     }
+    private DailyGoal findOwnedGoal(String id) {
+        String currentUserId = SecurityUtils.getCurrentUserId();
+        DailyGoal goal = dailyGoalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found"));
+        if (!goal.getUser().getId().equals(currentUserId)) {
+            throw new ResourceNotFoundException("Goal not found");
+        }
+        return goal;
+    }
 
+    public GoalResponseDTO update(String id, GoalsInputDTO goalInput) {
+        DailyGoal goal = findOwnedGoal(id);
+
+        if (goalInput.getTitle() != null) {
+            goal.setTitle(goalInput.getTitle());
+        }
+        if (goalInput.getType() != null) {
+            goal.setGoalType(goalInput.getType());
+        }
+        if (goalInput.getTargetValue() != null) {
+            goal.setTargetValue(goalInput.getTargetValue());
+        }
+        if (goalInput.getGoalDate() != null) {
+            goal.setGoalDate(goalInput.getGoalDate());
+        }
+
+        return toDTO(dailyGoalRepository.save(goal));
+    }
     public GoalResponseDTO toDTO(DailyGoal goal) {
         return new GoalResponseDTO(
                 goal.getId(),          // String ✓

@@ -24,5 +24,6 @@ public class DashbordSummaryDTO
 
     // one entry per day of the current week, for the weekly focus bar chart
     private List<DailyFocusPointDTO> weeklyFocus;
+    private List<DailyFocusPointDTO> weeklyTasksCompleted;
 
 }

@@ -39,4 +39,8 @@ public class TaskController
     {
         return ResponseEntity.ok(taskService.getTask(id));
     }
+    @PutMapping("/update")
+    public ResponseEntity<TaskResponseDTO> update(@RequestParam String id, @RequestBody TaskInputDTO task) {
+        return ResponseEntity.ok(taskService.update(id, task));
+    }
 }

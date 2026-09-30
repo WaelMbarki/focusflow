@@ -63,6 +63,28 @@ public class ProjectService {
                 .map(this::toDTO)
                 .toList();
     }
+    private Project findOwnedProject(String id) {
+        String currentUserId = SecurityUtils.getCurrentUserId();
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        if (!project.getUser().getId().equals(currentUserId)) {
+            throw new ResourceNotFoundException("Project not found");
+        }
+        return project;
+    }
+
+    public ProjectResponseDTO update(String id, ProjectInputDTO projectInput) {
+        Project project = findOwnedProject(id);
+
+        if (projectInput.getName() != null) {
+            project.setName(projectInput.getName());
+        }
+        if (projectInput.getColor() != null) {
+            project.setColor(projectInput.getColor());
+        }
+
+        return toDTO(projectRepository.save(project));
+    }
     public ProjectResponseDTO toDTO(Project project)
     {
         return new ProjectResponseDTO(project.getId(),project.getColor(),project.getName());

@@ -35,4 +35,8 @@ public class ProjectController
     {
         return ResponseEntity.ok(projectService.delete(id));
     }
+    @PutMapping("/update")
+    public ResponseEntity<ProjectResponseDTO> update(@RequestParam String id, @RequestBody ProjectInputDTO project) {
+        return ResponseEntity.ok(projectService.update(id, project));
+    }
 }

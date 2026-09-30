@@ -25,6 +25,7 @@ public class FocusSession
     @JoinColumn(name="task_id")
     private Task task;
     private LocalDateTime startTime;
+    private LocalDateTime lastResumedAt;
     @Enumerated(EnumType.STRING)
     private SessionsStatus status;
 

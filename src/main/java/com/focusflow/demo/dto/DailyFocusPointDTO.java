@@ -6,12 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class DailyFocusPointDTO
-{
+@AllArgsConstructor
+@NoArgsConstructor
+public class DailyFocusPointDTO {
     private LocalDate date;
-    private Integer focusSeconds;
-
+    private Double value;
 }
